@@ -1,0 +1,89 @@
+<!DOCTYPE HTML>
+<script>
+
+
+var unreadMessages = safari.extension.settings.unreadMessages;
+var BELUGAPODS_WEB_URL = "http://belugapods.com";
+
+//setInterval(newMessage, 20000);
+
+
+
+safari.application.addEventListener("validate", performValidate, false);
+safari.application.addEventListener("command", performCommand, false);
+
+function performValidate(event)
+{
+	switch (event.command) {
+	case "show-messages":
+		if ("badge" in event.target)
+			event.target.badge = unreadMessages;
+		break;
+	}
+}
+
+
+
+function performCommand(event)
+{
+	switch (event.command) {
+	case "show-messages":
+		var bw = safari.application.activeBrowserWindow;
+		var length = bw.tabs.length;
+		var bFound = false;
+		for (var i = 0; i < length; i++) {
+			if (bw.tabs[i].url.indexOf(BELUGAPODS_WEB_URL) == 0) {
+				bFound = true;
+				bw.tabs[i].activate();
+			}
+		}
+		if (bFound == false) {
+			var newTab = bw.openTab("foreground", 0);
+			newTab.url = BELUGAPODS_WEB_URL;
+		}		
+		updateUnreadMessageCount(0);
+	}
+}
+
+
+
+
+
+function validateToolbarItems()
+{
+	var toolbarItems = safari.extension.toolbarItems;
+	for (var i = 0; i < toolbarItems.length; ++i) {
+		toolbarItems[i].validate();
+	}
+}
+
+
+
+function updateUnreadMessageCount(count)
+{
+	unreadMessages = count;
+	safari.extension.settings.unreadMessages = unreadMessages;
+	validateToolbarItems();
+}
+
+
+function respondToMessage(messageEvent)
+{
+    if (messageEvent.name == "getSettingValue") {
+        var value = safari.extension.settings.getItem(messageEvent.message);
+		safari.application.activeBrowserWindow.activeTab.page.dispatchMessage("settingValueIs", value);
+    }
+    if (messageEvent.name == "setUnread_Count") {
+    	updateUnreadMessageCount(messageEvent.message);
+    }
+    
+    
+
+
+}
+
+safari.application.addEventListener("message",respondToMessage,false);
+
+
+
+</script>

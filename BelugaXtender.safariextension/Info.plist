@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Author</key>
+	<string>tmiz.net</string>
+	<key>CFBundleDisplayName</key>
+	<string>BelugaXtender</string>
+	<key>CFBundleIdentifier</key>
+	<string>net.tmiz.safari.belugaxtender</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleShortVersionString</key>
+	<string>0.1</string>
+	<key>CFBundleVersion</key>
+	<string>1</string>
+	<key>Chrome</key>
+	<dict>
+		<key>Global Page</key>
+		<string>global.html</string>
+		<key>Toolbar Items</key>
+		<array>
+			<dict>
+				<key>Command</key>
+				<string>show-messages</string>
+				<key>Identifier</key>
+				<string>messages</string>
+				<key>Image</key>
+				<string>beluga.png</string>
+				<key>Label</key>
+				<string>Messages</string>
+				<key>Palette Label</key>
+				<string>Messages</string>
+				<key>Tool Tip</key>
+				<string>Show messages.</string>
+			</dict>
+		</array>
+	</dict>
+	<key>Content</key>
+	<dict>
+		<key>Scripts</key>
+		<dict>
+			<key>Start</key>
+			<array>
+				<string>belugaXpander.js</string>
+			</array>
+		</dict>
+		<key>Whitelist</key>
+		<array>
+			<string>http://belugapods.com/pod/*</string>
+			<string>https://belugapods.com/pod/*</string>
+		</array>
+	</dict>
+	<key>Description</key>
+	<string>Safari Extension for Beluga</string>
+	<key>ExtensionInfoDictionaryVersion</key>
+	<string>1.0</string>
+	<key>Permissions</key>
+	<dict>
+		<key>Website Access</key>
+		<dict>
+			<key>Include Secure Pages</key>
+			<true/>
+			<key>Level</key>
+			<string>All</string>
+		</dict>
+	</dict>
+	<key>Website</key>
+	<string>http://tmiz.net</string>
+</dict>
+</plist>
