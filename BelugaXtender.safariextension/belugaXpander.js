@@ -1,9 +1,30 @@
 /* Injection Code BelugaXpander.js is based on helper.js of drikin.com */
-(function() {
-    // Settings
+(function () {
+
+	// variables
+    var base_title = document.title;
+    var last_update_id = getLastUpdateId();
+    var unread_count = 0;
     var settings = {};
 
-    // Event handlers
+
+	// Event Process
+
+	// initialize after loaded
+    function initAfterLoaded(event) {
+        base_title = document.title;
+        last_update_id = getLastUpdateId();
+        document.getElementById("composebutton").addEventListener("click", click, false);
+    }
+
+	// receive message
+    function getMessage(msgEvent) {
+        if (msgEvent.name == "settingValueIs") {
+            settings["useShiftEnterToPost"] = msgEvent.message;
+        }
+    }
+
+
     function focus() {
         resetCount();
     }
@@ -15,26 +36,26 @@
     function keydown(event) {
         if (event.keyIdentifier === "Enter") {
             var withModifierKey = event.ctrlKey || event.metaKey || event.altKey || event.shiftKey;
-            
-			if (event.keyCode == 13) {
-				var useShiftEnterToPost = settings["useShiftEnterToPost"];
-				if (useShiftEnterToPost && withModifierKey || !useShiftEnterToPost && !withModifierKey) {
-					var cf = document.getElementById("composeform");
-					cf.submit();
-					last_update_id++;
-					// make sure for clearing
-					setTimeout(function() {
-						document.getElementById("composetext").value = "";
-					}, 0);
-				}
-			}
+
+            if (event.keyCode == 13) {
+                var useShiftEnterToPost = settings["useShiftEnterToPost"];
+                if (useShiftEnterToPost && withModifierKey || !useShiftEnterToPost && !withModifierKey) {
+                    var cf = document.getElementById("composeform");
+                    cf.submit();
+                    last_update_id++;
+                    // make sure for clearing
+                    setTimeout(function () {
+                        document.getElementById("composetext").value = "";
+                    }, 0);
+                }
+            }
         }
     }
 
     function update(event) {
-    	if (last_update_id < 0) {
-    		return;
-    	}    
+        if (last_update_id < 0) {
+            return;
+        }
         var id = getLastUpdateId();
         if (id > last_update_id) {
             last_update_id = id;
@@ -42,7 +63,7 @@
             // update window title
             unread_count++;
             document.title = base_title + "(" + unread_count + ") ";
-			safari.self.tab.dispatchMessage("setUnread_Count", unread_count);
+            safari.self.tab.dispatchMessage("setUnread_Count", unread_count);
 
             // show notification
             var lu = getLastUpdateElement();
@@ -55,7 +76,11 @@
                 var name = lu.getElementsByClassName("uname")[0].textContent;
                 var status = lu.getElementsByClassName("ustatus")[0].textContent;
             }
-            showNotification({"image_url": img_url, "name": name, "status": status});
+            showNotification({
+                "image_url": img_url,
+                "name": name,
+                "status": status
+            });
         }
     }
 
@@ -63,13 +88,13 @@
     function resetCount() {
         document.title = base_title;
         unread_count = 0;
+    	safari.self.tab.dispatchMessage("setUnread_Count", unread_count);
     }
-
 
     function getLastUpdateElement() {
         var ru = document.getElementById("realupdates");
         if (ru == null) {
-        	return null;
+            return null;
         }
         if (is_mobile()) {
             return ru.getElementsByClassName("update-item")[0];
@@ -81,37 +106,23 @@
     function getLastUpdateId() {
         var lu = getLastUpdateElement();
         if (lu == null) {
-        	return -1;
+            return -1;
         }
         return lu.id;
     }
 
     function is_mobile() {
         var fl = document.getElementById("footer-links");
-        return (fl==null) ? false : true;
+        return (fl == null) ? false : true;
     }
 
-
-    var base_title = document.title;
-    var last_update_id = getLastUpdateId();
-    var unread_count = 0;
-
-    function setTitle(event) {
-		base_title = document.title;
-		last_update_id = getLastUpdateId();
-	    document.getElementById("composebutton").addEventListener("click", click, false);
-	}
-
-	function getMessage(msgEvent) {
-    	if (msgEvent.name == "settingValueIs") {
-	        settings["useShiftEnterToPost"] = msgEvent.message;
-	    }
-	}
-	safari.self.tab.dispatchMessage("getSettingValue", "useShiftEnterToPost"); // ask for value
-	safari.self.addEventListener("message", getMessage, false); // wait for reply
-
+	// initialize
+    safari.self.tab.dispatchMessage("getSettingValue", "useShiftEnterToPost"); // ask for value
+    safari.self.addEventListener("message", getMessage, false); // wait for reply
     window.addEventListener("focus", focus, false);
     document.addEventListener("keydown", keydown, false);
-    document.addEventListener("DOMContentLoaded", setTitle, false);
+    document.addEventListener("DOMContentLoaded", initAfterLoaded, false);
     document.addEventListener("DOMNodeInserted", update, false);
+
+
 })();

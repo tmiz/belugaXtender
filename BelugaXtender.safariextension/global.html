@@ -8,23 +8,26 @@
 var unreadMessages = safari.extension.settings.unreadMessages;
 var BELUGAPODS_WEB_URL = "http://belugapods.com";
 
-safari.application.addEventListener("validate", performValidate, false);
-safari.application.addEventListener("command", performCommand, false);
+safari.application.addEventListener("validate", performValidate , false);
+safari.application.addEventListener("command", 	performCommand  , false);
+safari.application.addEventListener("message",	respondToMessage, false);
+
 
 function performValidate(event)
 {
 	switch (event.command) {
-	case "show-messages":
+	case "activate-beluga":
 		if ("badge" in event.target)
 			event.target.badge = unreadMessages;
 		break;
 	}
 }
 
+
 function performCommand(event)
 {
 	switch (event.command) {
-	case "show-messages":
+	case "activate-beluga":
 		var bw = safari.application.activeBrowserWindow;
 		var length = bw.tabs.length;
 		var bFound = false;
@@ -42,6 +45,7 @@ function performCommand(event)
 	}
 }
 
+
 function validateToolbarItems()
 {
 	var toolbarItems = safari.extension.toolbarItems;
@@ -50,12 +54,14 @@ function validateToolbarItems()
 	}
 }
 
+
 function updateUnreadMessageCount(count)
 {
 	unreadMessages = count;
 	safari.extension.settings.unreadMessages = unreadMessages;
 	validateToolbarItems();
 }
+
 
 function respondToMessage(messageEvent)
 {
@@ -67,8 +73,5 @@ function respondToMessage(messageEvent)
     	updateUnreadMessageCount(messageEvent.message);
     }
 }
-
-safari.application.addEventListener("message",respondToMessage,false);
-
 
 </script>
