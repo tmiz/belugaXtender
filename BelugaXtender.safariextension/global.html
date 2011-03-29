@@ -21,18 +21,44 @@ function performValidate(event) {
     }
 }
 
+function findBelugaTabOnAllWindow(bw)
+{
+	var bws = safari.application.browserWindows;
+	var length = bws.length;
+    for (var i = 0; i < length; i++) {
+		if (findBelugaTabOnActivatedWindow(bws[i]) == true) {
+			bws[i].activate();
+			return true;
+		}
+	}
+    return false;
+}
 
-function performCommand(event) {
-    switch (event.command) {
-    case "activate-beluga":
-        var bw = safari.application.activeBrowserWindow;
-        var length = bw.tabs.length;
-        var bFound = false;
+function findBelugaTabOnActivatedWindow(bw)
+{
+	var bFound = false;
+	var length = bw.tabs.length;
         for (var i = 0; i < length; i++) {
             if (bw.tabs[i].url.indexOf(BELUGAPODS_WEB_URL) == 0) {
                 bFound = true;
                 bw.tabs[i].activate();
             }
+        }
+    return bFound;
+}
+
+
+
+function performCommand(event) {
+    switch (event.command) {
+    case "activate-beluga":
+		var bw = safari.application.activeBrowserWindow;
+        var bFound = false;
+        var bFindBy = safari.extension.settings.findBelugaTabFrom;
+        if (bFindBy == "allWindow") {
+        	bFound = findBelugaTabOnAllWindow(bw);
+        } else {
+        	bFound = findBelugaTabOnActivatedWindow(bw);        
         }
         if (bFound == false) {
             var newTab = bw.openTab("foreground", 0);

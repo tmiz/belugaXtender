@@ -22,5 +22,25 @@
 		<key>Type</key>
 		<string>CheckBox</string>
 	</dict>
+	<dict>
+		<key>DefaultValue</key>
+		<string>allWindow</string>
+		<key>Key</key>
+		<string>findBelugaTabFrom</string>
+		<key>Title</key>
+		<string>Find Beluga Tab from</string>
+		<key>Titles</key>
+		<array>
+			<string>Active Window only</string>
+			<string>All Windows</string>
+		</array>
+		<key>Type</key>
+		<string>PopUpButton</string>
+		<key>Values</key>
+		<array>
+			<string>activeWindowOnly</string>
+			<string>allWindow</string>
+		</array>
+	</dict>
 </array>
 </plist>
