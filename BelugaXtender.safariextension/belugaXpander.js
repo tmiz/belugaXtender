@@ -15,6 +15,7 @@
         base_title = document.title;
         last_update_id = getLastUpdateId();
         document.getElementById("composebutton").addEventListener("click", click, false);
+	    safari.self.tab.dispatchMessage("getSettingValue", "useShiftEnterToPost"); // ask for value
     }
 
 	// receive message
@@ -117,12 +118,10 @@
     }
 
 	// initialize
-    safari.self.tab.dispatchMessage("getSettingValue", "useShiftEnterToPost"); // ask for value
     safari.self.addEventListener("message", getMessage, false); // wait for reply
     window.addEventListener("focus", focus, false);
     document.addEventListener("keydown", keydown, false);
     document.addEventListener("DOMContentLoaded", initAfterLoaded, false);
     document.addEventListener("DOMNodeInserted", update, false);
-
 
 })();

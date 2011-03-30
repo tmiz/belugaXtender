@@ -94,4 +94,16 @@ function respondToMessage(messageEvent) {
     }
 }
 
+
+function sendDefaultValueToPage(){
+        var value = safari.extension.settings.getItem("useShiftEnterToPost");
+        safari.application.activeBrowserWindow.activeTab.page.dispatchMessage("settingValueIs", value);
+}
+
+function propergateChangeSetting(event){
+	sendDefaultValueToPage();
+}
+
+safari.extension.settings.addEventListener("change", propergateChangeSetting, false);
+sendDefaultValueToPage();
 </script>
