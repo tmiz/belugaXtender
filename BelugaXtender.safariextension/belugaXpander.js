@@ -16,6 +16,8 @@
         last_update_id = getLastUpdateId();
         document.getElementById("composebutton").addEventListener("click", click, false);
 	    safari.self.tab.dispatchMessage("getSettingValue", "useShiftEnterToPost"); // ask for value
+    	document.body.innerHTML = document.body.innerHTML +'<object type="application/x-growl-safari-bridge" width="0" height="0" id="growl-safari-bridge"></object>';
+	      window.GrowlSafariBridge = document.getElementById('growl-safari-bridge');
     }
 
 	// receive message
@@ -77,11 +79,9 @@
                 var name = lu.getElementsByClassName("uname")[0].textContent;
                 var status = lu.getElementsByClassName("ustatus")[0].textContent;
             }
-            showNotification({
-                "image_url": img_url,
-                "name": name,
-                "status": status
-            });
+
+			GrowlSafariBridge.notifyWithOptions(name, status, img_url, {isSticky: false, priority: -1});
+
         }
     }
 
