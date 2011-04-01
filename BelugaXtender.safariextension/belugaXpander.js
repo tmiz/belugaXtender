@@ -1,26 +1,29 @@
 /* Injection Code BelugaXpander.js is based on helper.js of drikin.com */
 (function () {
 
-	// variables
+    // variables
     var base_title = document.title;
     var last_update_id = getLastUpdateId();
     var unread_count = 0;
     var settings = {};
 
 
-	// Event Process
+    // Event Process
+    // initialize after loaded
 
-	// initialize after loaded
+
     function initAfterLoaded(event) {
         base_title = document.title;
         last_update_id = getLastUpdateId();
         document.getElementById("composebutton").addEventListener("click", click, false);
-	    safari.self.tab.dispatchMessage("getSettingValue", "useShiftEnterToPost"); // ask for value
-    	document.body.innerHTML = document.body.innerHTML +'<object type="application/x-growl-safari-bridge" width="0" height="0" id="growl-safari-bridge"></object>';
-	      window.GrowlSafariBridge = document.getElementById('growl-safari-bridge');
+        safari.self.tab.dispatchMessage("getSettingValue", "useShiftEnterToPost"); // ask for value
+        document.body.innerHTML = document.body.innerHTML + '<object type="application/x-growl-safari-bridge" width="0" height="0" id="growl-safari-bridge"></object>';
+        window.GrowlSafariBridge = document.getElementById('growl-safari-bridge');
     }
 
-	// receive message
+    // receive message
+
+
     function getMessage(msgEvent) {
         if (msgEvent.name == "settingValueIs") {
             settings["useShiftEnterToPost"] = msgEvent.message;
@@ -80,16 +83,21 @@
                 var status = lu.getElementsByClassName("ustatus")[0].textContent;
             }
 
-			GrowlSafariBridge.notifyWithOptions(name, status, img_url, {isSticky: false, priority: -1});
-
+            GrowlSafariBridge.notifyWithOptions(name, status, {
+                isSticky: false,
+                priority: -1,
+                imageUrl: img_url
+            });
         }
     }
 
     // Common functions
+
+
     function resetCount() {
         document.title = base_title;
         unread_count = 0;
-    	safari.self.tab.dispatchMessage("setUnread_Count", unread_count);
+        safari.self.tab.dispatchMessage("setUnread_Count", unread_count);
     }
 
     function getLastUpdateElement() {
@@ -117,7 +125,7 @@
         return (fl == null) ? false : true;
     }
 
-	// initialize
+    // initialize
     safari.self.addEventListener("message", getMessage, false); // wait for reply
     window.addEventListener("focus", focus, false);
     document.addEventListener("keydown", keydown, false);
