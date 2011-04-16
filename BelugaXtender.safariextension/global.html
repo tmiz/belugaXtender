@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <script>
 /*
-	Safari Extension BelugaXtender
+	Safari Extension BelugaXtender by tmiz.net
 	This software is inspired by and Chrome Extension Beluga Helper by drikin.com
 */
 
@@ -22,26 +22,26 @@ function performValidate(event) {
 }
 
 function findBelugaTabOnAllWindow(bw) {
-	var bws = safari.application.browserWindows;
-	var length = bws.length;
+    var bws = safari.application.browserWindows;
+    var length = bws.length;
     for (var i = 0; i < length; i++) {
-		if (findBelugaTabOnActivatedWindow(bws[i]) == true) {
-			bws[i].activate();
-			return true;
-		}
-	}
+        if (findBelugaTabOnActivatedWindow(bws[i]) == true) {
+            bws[i].activate();
+            return true;
+        }
+    }
     return false;
 }
 
-function findBelugaTabOnActivatedWindow(bw){
-	var bFound = false;
-	var length = bw.tabs.length;
-        for (var i = 0; i < length; i++) {
-            if (bw.tabs[i].url.indexOf(BELUGAPODS_WEB_URL) == 0) {
-                bFound = true;
-                bw.tabs[i].activate();
-            }
+function findBelugaTabOnActivatedWindow(bw) {
+    var bFound = false;
+    var length = bw.tabs.length;
+    for (var i = 0; i < length; i++) {
+        if (bw.tabs[i].url.indexOf(BELUGAPODS_WEB_URL) == 0) {
+            bFound = true;
+            bw.tabs[i].activate();
         }
+    }
     return bFound;
 }
 
@@ -50,13 +50,13 @@ function findBelugaTabOnActivatedWindow(bw){
 function performCommand(event) {
     switch (event.command) {
     case "activate-beluga":
-		var bw = safari.application.activeBrowserWindow;
+        var bw = safari.application.activeBrowserWindow;
         var bFound = false;
         var bFindBy = safari.extension.settings.findBelugaTabFrom;
         if (bFindBy == "allWindows") {
-        	bFound = findBelugaTabOnAllWindow(bw);
+            bFound = findBelugaTabOnAllWindow(bw);
         } else {
-        	bFound = findBelugaTabOnActivatedWindow(bw);        
+            bFound = findBelugaTabOnActivatedWindow(bw);
         }
         if (bFound == false) {
             var newTab = bw.openTab("foreground", 0);
@@ -82,33 +82,33 @@ function updateUnreadMessageCount(count) {
 }
 
 function openUrlOnNewTabBackground(url) {
-	var bw = safari.application.activeBrowserWindow;
-	var newTab = bw.openTab("background", bw.tabs.length);
+    var bw = safari.application.activeBrowserWindow;
+    var newTab = bw.openTab("background", bw.tabs.length);
     newTab.url = url;
 }
 
 function respondToMessage(messageEvent) {
     if (messageEvent.name == "getSettingValue") {
-		sendSettingValueToPage(messageEvent.message);
+        sendSettingValueToPage(messageEvent.message);
     }
     if (messageEvent.name == "setUnread_Count") {
         updateUnreadMessageCount(messageEvent.message);
-    }    
+    }
     if (messageEvent.name == "openUrlOnNewTabBackground") {
         openUrlOnNewTabBackground(messageEvent.message);
     }
 }
 
-function sendSettingValueToPage(attr){
-	var result = {};
+function sendSettingValueToPage(attr) {
+    var result = {};
     result.attr = attr;
     result.value = safari.extension.settings.getItem(attr);
     safari.application.activeBrowserWindow.activeTab.page.dispatchMessage("settingValueIs", result);
 }
 
-function propergateChangeSetting(event){
-	sendSettingValueToPage("useShiftEnterToPost");
-	sendSettingValueToPage("enableAutoOpenUrl");
+function propergateChangeSetting(event) {
+    sendSettingValueToPage("useShiftEnterToPost");
+    sendSettingValueToPage("enableAutoOpenUrl");
 }
 
 safari.extension.settings.addEventListener("change", propergateChangeSetting, false);
