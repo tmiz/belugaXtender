@@ -24,22 +24,32 @@
 	</dict>
 	<dict>
 		<key>DefaultValue</key>
-		<string>allWindow</string>
+		<false/>
+		<key>Key</key>
+		<string>enableAutoOpenUrl</string>
+		<key>Title</key>
+		<string>Enable auto open URL</string>
+		<key>Type</key>
+		<string>CheckBox</string>
+	</dict>
+	<dict>
+		<key>DefaultValue</key>
+		<string>allWindows</string>
 		<key>Key</key>
 		<string>findBelugaTabFrom</string>
 		<key>Title</key>
 		<string>Find Beluga Tab from</string>
 		<key>Titles</key>
 		<array>
-			<string>Active Window only</string>
-			<string>All Windows</string>
+			<string>active window</string>
+			<string>all windows</string>
 		</array>
 		<key>Type</key>
 		<string>PopUpButton</string>
 		<key>Values</key>
 		<array>
-			<string>activeWindowOnly</string>
-			<string>allWindow</string>
+			<string>activeWindow</string>
+			<string>allWindows</string>
 		</array>
 	</dict>
 </array>

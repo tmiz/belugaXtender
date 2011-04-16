@@ -21,8 +21,7 @@ function performValidate(event) {
     }
 }
 
-function findBelugaTabOnAllWindow(bw)
-{
+function findBelugaTabOnAllWindow(bw) {
 	var bws = safari.application.browserWindows;
 	var length = bws.length;
     for (var i = 0; i < length; i++) {
@@ -34,8 +33,7 @@ function findBelugaTabOnAllWindow(bw)
     return false;
 }
 
-function findBelugaTabOnActivatedWindow(bw)
-{
+function findBelugaTabOnActivatedWindow(bw){
 	var bFound = false;
 	var length = bw.tabs.length;
         for (var i = 0; i < length; i++) {
@@ -55,7 +53,7 @@ function performCommand(event) {
 		var bw = safari.application.activeBrowserWindow;
         var bFound = false;
         var bFindBy = safari.extension.settings.findBelugaTabFrom;
-        if (bFindBy == "allWindow") {
+        if (bFindBy == "allWindows") {
         	bFound = findBelugaTabOnAllWindow(bw);
         } else {
         	bFound = findBelugaTabOnActivatedWindow(bw);        
@@ -83,27 +81,39 @@ function updateUnreadMessageCount(count) {
     validateToolbarItems();
 }
 
+function openUrlOnNewTabBackground(url) {
+	var bw = safari.application.activeBrowserWindow;
+	var newTab = bw.openTab("background", bw.tabs.length);
+    newTab.url = url;
+}
 
 function respondToMessage(messageEvent) {
     if (messageEvent.name == "getSettingValue") {
-        var value = safari.extension.settings.getItem(messageEvent.message);
-        safari.application.activeBrowserWindow.activeTab.page.dispatchMessage("settingValueIs", value);
+		sendSettingValueToPage(messageEvent.message);
     }
     if (messageEvent.name == "setUnread_Count") {
         updateUnreadMessageCount(messageEvent.message);
+    }    
+    if (messageEvent.name == "openUrlOnNewTabBackground") {
+        openUrlOnNewTabBackground(messageEvent.message);
     }
 }
 
-
-function sendDefaultValueToPage(){
-        var value = safari.extension.settings.getItem("useShiftEnterToPost");
-        safari.application.activeBrowserWindow.activeTab.page.dispatchMessage("settingValueIs", value);
+function sendSettingValueToPage(attr){
+	var result = {};
+    result.attr = attr;
+    result.value = safari.extension.settings.getItem(attr);
+    safari.application.activeBrowserWindow.activeTab.page.dispatchMessage("settingValueIs", result);
 }
 
 function propergateChangeSetting(event){
-	sendDefaultValueToPage();
+	sendSettingValueToPage("useShiftEnterToPost");
+	sendSettingValueToPage("enableAutoOpenUrl");
 }
 
 safari.extension.settings.addEventListener("change", propergateChangeSetting, false);
-sendDefaultValueToPage();
+
+// default
+sendSettingValueToPage("useShiftEnterToPost");
+sendSettingValueToPage("enableAutoOpenUrl");
 </script>

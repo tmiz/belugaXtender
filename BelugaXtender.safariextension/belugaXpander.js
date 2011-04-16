@@ -17,16 +17,15 @@
         last_update_id = getLastUpdateId();
         document.getElementById("composebutton").addEventListener("click", click, false);
         safari.self.tab.dispatchMessage("getSettingValue", "useShiftEnterToPost"); // ask for value
+        safari.self.tab.dispatchMessage("getSettingValue", "enableAutoOpenUrl"); // ask for value
         document.body.innerHTML = document.body.innerHTML + '<object type="application/x-growl-safari-bridge" width="0" height="0" id="growl-safari-bridge"></object>';
         window.GrowlSafariBridge = document.getElementById('growl-safari-bridge');
     }
 
     // receive message
-
-
     function getMessage(msgEvent) {
         if (msgEvent.name == "settingValueIs") {
-            settings["useShiftEnterToPost"] = msgEvent.message;
+            settings[msgEvent.message.attr] = msgEvent.message.value;
         }
     }
 
@@ -83,21 +82,36 @@
                 var status = lu.getElementsByClassName("ustatus")[0].textContent;
             }
 
-            GrowlSafariBridge.notifyWithOptions(name, status, {
-                isSticky: false,
-                priority: -1,
-                imageUrl: img_url
-            });
+            showNotification({"img_url": img_url, "name": name, "status": status});
+            openUrlFromText(status);
         }
     }
 
     // Common functions
-
-
     function resetCount() {
         document.title = base_title;
         unread_count = 0;
         safari.self.tab.dispatchMessage("setUnread_Count", unread_count);
+    }
+
+    function showNotification(msg) {
+            GrowlSafariBridge.notifyWithOptions(msg.name, msg.status, {
+                isSticky: false,
+                priority: -1,
+                imageUrl: msg.img_url
+            });
+    }
+
+	function openUrlFromText(text) {
+        var enableAutoOpenUrl = settings["enableAutoOpenUrl"];
+        if (enableAutoOpenUrl) {
+            var urls = text.match(/https?:\/\/\S+/g);
+            if (urls) {
+                for (var i = 0, n = urls.length; i < n; i++) {
+			        safari.self.tab.dispatchMessage("openUrlOnNewTabBackground", urls[i]);
+                }
+            }
+        }
     }
 
     function getLastUpdateElement() {
