@@ -1,4 +1,4 @@
-BelugaXtender 0.1.2
+BelugaXtender 0.2
 Safari Extension for Beluga Group Chat.
 
 This software is inspired by Chrome Extension for Beluga by drikin.com.
@@ -13,6 +13,9 @@ and this software is distributed on https://github.com/uasi/growl-safari-bridge
 
 
 What's new
+0.2
+Support auto open url function on background new tab from incomming messages
+
 0.1.2
 Support Growl by GrowlSafariBridge
 
