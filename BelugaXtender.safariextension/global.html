@@ -106,14 +106,18 @@ function sendSettingValueToPage(attr) {
     safari.application.activeBrowserWindow.activeTab.page.dispatchMessage("settingValueIs", result);
 }
 
+function sendDefaultsToPage() {
+	for (key in safari.extension.settings) {
+		sendSettingValueToPage(key);
+	}
+}
+
 function propergateChangeSetting(event) {
-    sendSettingValueToPage("useShiftEnterToPost");
-    sendSettingValueToPage("enableAutoOpenUrl");
+	sendDefaultsToPage();
 }
 
 safari.extension.settings.addEventListener("change", propergateChangeSetting, false);
 
-// default
-sendSettingValueToPage("useShiftEnterToPost");
-sendSettingValueToPage("enableAutoOpenUrl");
+// send page to default
+sendDefaultsToPage();
 </script>
