@@ -4,17 +4,23 @@ Safari Extension for Beluga Group Chat.
 This software is inspired by Chrome Extension for Beluga by drikin.com.
 
 INSTALL
-please double click BelugaXtender.safariextz
+(1) Do double click BelugaXtender.safariextz
+(2) If you want to use to Growl, BelugaXtender requires GrowlSafariBridge.
 
-If you want to use to Growl, Please copy GrowlSafariBridge.webplugin to ~/Library/Internet Plugins/
+Please download from following website
 
-GrowlSafariBridge is written by uasi.
-and this software is distributed on https://github.com/uasi/growl-safari-bridge
+https://github.com/uasi/growl-safari-bridge/downloads
+
+and move GrowlSafariBridge.webplugin to ~/Library/Internet Plugins/
+
+GrowlSafariBridge is written by quasi.
+And this software is distributed on https://github.com/uasi/growl-safari-bridge/downloads
 
 
 What's new
 0.2
-Support auto open url function on background new tab from incomming messages
+Support auto open url function on background new tab from incoming messages
+Detach GrowlSafariBridge from Release Bundle
 
 0.1.2
 Support Growl by GrowlSafariBridge
@@ -24,4 +30,3 @@ Support find beluga tab from all browser windows.
 
 0.1 
 initial release
-
