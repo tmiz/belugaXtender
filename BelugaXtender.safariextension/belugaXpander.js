@@ -95,11 +95,13 @@
     }
 
     function showNotification(msg) {
+        if (GrowlSafariBridge.notifyWithOptions !== undefined) {
             GrowlSafariBridge.notifyWithOptions(msg.name, msg.status, {
                 isSticky: false,
                 priority: -1,
                 imageUrl: msg.img_url
             });
+        }
     }
 
 	function openUrlFromText(text) {
