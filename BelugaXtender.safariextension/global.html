@@ -37,7 +37,11 @@ function findBelugaTabOnActivatedWindow(bw) {
     var bFound = false;
     var length = bw.tabs.length;
     for (var i = 0; i < length; i++) {
-        if (bw.tabs[i].url.indexOf(BELUGAPODS_WEB_URL) == 0) {
+        var url = bw.tabs[i].url;
+        if (url === undefined) {
+            continue;
+        }
+        if (url.indexOf(BELUGAPODS_WEB_URL) == 0) {
             bFound = true;
             bw.tabs[i].activate();
         }
